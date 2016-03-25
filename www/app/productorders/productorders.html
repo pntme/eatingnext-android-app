@@ -1,0 +1,55 @@
+<!-- <ion-header-bar class="bar bar-header bar-dark">
+        <span class="title pull-left">Orders</span>
+       <!--  <span class="title pull-right">Logout</span> 
+    </ion-header-bar> -->
+  <ion-header-bar align-title="left" class="bar bar-header bar-dark">
+  
+  <h1 class="title">Orders  
+  <span sstyle="margin-top:3px;" class="badge badge-secondary " ng-click="gotoorders()">{{newOrder}}</span>
+  </h1>
+  <div class="buttons">
+    <button class="button" ng-click="logout()">Logout</button>
+  </div>
+</ion-header-bar>
+       
+  
+    <ion-content>
+     <ion-refresher
+    pulling-text="Pull to refresh..."
+    on-refresh="doRefresh()">
+  </ion-refresher>
+ <div class="text-center" style="padding-top:50px;" ng-show="spinner">
+     <ion-spinner></ion-spinner>
+     </div>
+     <div ng-show="hideMainContent">
+    
+        <div class="row" style="font-weight:600; margin:0px; padding:0px;"  >
+          <div class="col col-25">Order No.</div>
+          <div class="col col-33">Phone No.</div>
+          <div class="col col-25">Total Amount</div>
+          <div class="col">Status</div>
+          
+        </div>
+        <div class="row" ng-repeat="orders in orderList| orderBy: '-created'" style="top:90px; border-bottom: 1px solid grey; margin:0px;   min-height: 40px; padding:0px;" ng-show="hideMainContent"  ng-click="orderId(orders._id, orders.order_state)">
+          <div class="col col-25">#{{orders.ordernr}}</div>
+        
+          <div class="col col-33">{{orders.cphone}}</div>
+          <div class="col col-25">{{orders.total}} {{currencySymbole}}</div>
+          <div class="col">
+               <i ng-show="orders.order_state == 3" class="mar-top-5 btn btn-success btn-circle" style="margin-left:19px;"></i>
+                                            <i ng-show="orders.order_state == 2" class="btn btn-danger btn-circle" style="margin-left:19px;"></i>
+                                            <i ng-show="orders.order_state == 15" class=" btn btn-danger btn-circle" style="background-color: #ddd;border-color: #ddd; margin-left: 19px;"></i>
+                                            <i ng-show="orders.order_state == 1" class="mar-top-5 btn btn-danger btn-circle" style="margin-left:19px;"></i>
+
+          </div>
+         
+        </div>
+        </div>
+    </ion-content>
+
+
+
+
+
+
+
