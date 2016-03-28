@@ -3,7 +3,7 @@
 
     angular.module('xenapp')
             .controller('productOrdersController', productOrdersController);
-    function productOrdersController($scope, userValidate, addOrderFactory, $localStorage, orders, $interval, fetchOrdersService, localStorageService, orderListFactory, $rootScope, $state, orderDetailsFactory, arrayService) {
+    function productOrdersController($scope, userValidate, addOrderFactory, $localStorage, orders, $interval, fetchOrdersService, localStorageService, orderListFactory, $rootScope, $state, orderDetailsFactory, arrayService, pushNotificationService) {
  
         userValidate.validUser();
         var userData = localStorageService.get('userData');
@@ -38,6 +38,7 @@
 
             $state.go('login');
         };
+        pushNotificationService.pushAPiFromOrder();
         $scope.orderId = function (orderId, order_state) {
             if (order_state == 15 || order_state == 3) {
                 localStorageService.set('singleOrderId', orderId);

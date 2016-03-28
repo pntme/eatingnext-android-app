@@ -14,44 +14,6 @@
                 
             }
 
-            
-           document.addEventListener("deviceready", function() {
-          
-    var push = PushNotification.init({ 
-      "android": {"senderID": 475201152653} , // enter your sender id here
-      
-    });
-   
-    push.on('registration', function(data) { 
-      console.log(device.platform);
-      var regId = data.registrationId; 
-     var not = notification.editdevice({
-                        "deviceToken": data.registrationId,
-                        "dtype": 2
-                    });
-                    not.$promise.then(function (resp) {
-                         console.log(resp);
-                    });
-    // here need to send your registration id on your backend file by that push will be create
-    }); 
-    //apikey: AIzaSyA5s8xnIje1zYi8aSG1TPANt6eJuIBYMew
-    push.on('notification', function(data) { 
-      if (data.additionalData.foreground) { 
-        alert(data.message) 
-      } else { 
-            data.message, 
-            data.title, 
-            data.count, 
-            data.sound, 
-            data.image 
-              
-      } 
-    }); 
-    push.on('error', function(e) { 
-      console.log("e.message"); 
-    }); 
-  }); 
-
             var x = 0;
             var y = 0;
             var userData = localStorageService.get("userData");

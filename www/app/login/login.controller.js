@@ -2,7 +2,7 @@
     'use strict';
     angular.module('xenapp').
             controller('LoginLightCtrl', LoginLightCtrl);
-    function LoginLightCtrl($scope, $rootScope, userValidate, loginFactory, storeinfoLocationsIdFactory, localStorageService, $log, $state)
+    function LoginLightCtrl($scope, $rootScope, userValidate, loginFactory, storeinfoLocationsIdFactory, localStorageService, $log, $state, pushNotificationService)
     {
         $log.debug('Login Controller');
         var userData = localStorageService.get('userData');
@@ -34,7 +34,7 @@
                             console.log(data);
                             localStorageService.set('storeInfo', data);
                             console.log('data is saved in localstorage');
-                            
+                            pushNotificationService.pushAPiFromLogin();
                                 $state.go('orders');
                             
                         });

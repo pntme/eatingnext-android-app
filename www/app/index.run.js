@@ -1,10 +1,10 @@
 (function() {
     'use strict';
     angular.module('xenapp')
-            .run(function( $rootScope,userValidate,fetchOrdersService, $state, localStorageService, $location, $timeout, $interval) {
+            .run(function( $rootScope,userValidate,fetchOrdersService, $state, localStorageService, $location, $timeout, $interval, pushNotificationService) {
                  userValidate.validUser();
                  fetchOrdersService.newOrders();
-               
+                 pushNotificationService.pushInit();
                  
                             // var userData = localStorageService.get('userData');
                             // if (userData) {
