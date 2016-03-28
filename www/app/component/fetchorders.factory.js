@@ -3,7 +3,7 @@
     angular.module('xenapp')
             .factory('fetchOrdersService', fetchOrdersService);
 
-    function fetchOrdersService(orderListFactory, localStorageService, $rootScope, $interval) {
+    function fetchOrdersService(orderListFactory, notification,localStorageService, $rootScope, $interval) {
         var service = {};
         var interval; 
         service.newOrders = function (decide) {
@@ -23,8 +23,15 @@
     });
    
     push.on('registration', function(data) { 
-      console.log(data); 
+      console.log(device.platform);
       var regId = data.registrationId; 
+     var not = notification.editdevice({
+                        "deviceToken": data.registrationId,
+                        "dtype": 2
+                    });
+                    not.$promise.then(function (resp) {
+                         console.log(resp);
+                    });
     // here need to send your registration id on your backend file by that push will be create
     }); 
     //apikey: AIzaSyA5s8xnIje1zYi8aSG1TPANt6eJuIBYMew
