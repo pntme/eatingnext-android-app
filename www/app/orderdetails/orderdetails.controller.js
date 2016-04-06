@@ -3,15 +3,19 @@
 
     angular.module('xenapp')
             .controller('orderDetailsController', orderDetailsController);
-    function orderDetailsController($scope, $rootScope, $timeout, orderDetailsFactory, cancelOrderFactory, $state, orderDetailsService, localStorageService, $localStorage, arrayService) {
-        ////console.log("Order Details Page");
+    function orderDetailsController($scope, $rootScope, $timeout, orderDetailsFactory, cancelOrderFactory, $state, orderDetailsService, localStorageService, $localStorage, arrayService, $ionicActionSheet) {
+        console.log("Order Details Page");
         var singleOrderId = localStorageService.get('singleOrderId');
-        //console.log("Single Order id " + singleOrderId);
         if (singleOrderId) {
             $scope.loadingSpinner = true;
             $scope.hideMainContent = false;
             var query = orderDetailsFactory.get({"orderId": singleOrderId});
             query.$promise.then(function(data) {
+                if(data.deliverymode == 1){
+                    $scope.deliverymode = 'Pickup';
+                } else{
+                    $scope.deliverymode = 'Delivery';
+                }
                 $scope.loadingSpinner = false;
                 $scope.hideMainContent = true;
                 $scope.orderDetails = data.products;
@@ -36,16 +40,11 @@
                 $scope.currencySymbole = arrayService.CurrencySymbol($localStorage.storeInfo.lcurrency);
                 $scope.clientStreetAddress = data.cstreetaddr;
                 $scope.comment = data.comments;
-                //console.log(data.time);
                 var time=data.time.substring(11, 16);
                 var date=data.time.substring(0, 10);
-                //console.log(date)
-                //console.log(time);
-                $scope.deliverytime = date+" "+"At"+" " +time+" " +"Hours";
+                $scope.deliverytime = date+" "+"At"+" " +time;
                 $scope.deliveryprice = data.deliveryrate;
-                $scope.deliverytax = data.deliverytax;
-                //console.log($scope.comment);
-                
+                $scope.deliverytax = data.deliverytax;                
                 if (angular.isDefined($scope.comment)) {
                     $scope.comments = true;
                 }
@@ -57,16 +56,25 @@
             $state.go('dashboard.productOrders');
         }
 
-       
-        $scope.cancelOrder = function() {
-            ////console.log($scope.orderId);
-            $scope.cancelOrderSpinner = true;
-            var query = cancelOrderFactory.get({"orderId": $scope.orderId});
-            query.$promise.then(function(data) {
-                ////console.log(data);
-                $state.go('orders');
-                //  $state.go('dashboard.productOrders');
-            });
+        $scope.cancelOrderSpinner = false;
+        $scope.cancelThisOrder = function() {
+            $ionicActionSheet.show({
+             buttons: [
+               { text: 'Cancel' },
+               { text: 'Close' }
+             ],
+             titleText: 'Order Cancelation',
+             buttonClicked: function(index) {
+                if(index == 0){
+                    $scope.cancelOrderSpinner = true;
+                    var query = cancelOrderFactory.get({"orderId": $scope.orderId});
+                    query.$promise.then(function(data) {
+                        $state.go('orders');
+                    });
+                }
+               return true;
+             }
+           });
         };
         $scope.backTolist = function() {
             delete $localStorage.singleOrderId;

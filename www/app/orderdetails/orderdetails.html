@@ -1,116 +1,94 @@
 <div class="text-center" ng-show="loadingSpinner" style="margin-top:15%;">
-     <ion-spinner></ion-spinner>
+    <ion-spinner></ion-spinner>
 </div>
-  
-  <div class="bar bar-header bar-dark">
-  <a class="button icon-left ion-chevron-left button-clear button-white" ng-click="backTolist()"></a>
-  <h1 class="title">Order Details</h1>
-  
+
+<div class="bar bar-header bar-dark">
+    <a class="button icon-left ion-chevron-left button-clear button-white" ng-click="backTolist()"></a>
+    <h1 class="title">Order Details</h1>
+
 </div>
 
 
-<div ng-show="hideMainContent" >
-   <ion-content style="
+<div ng-show="hideMainContent">
+    <ion-content style="
     padding-top: 70px;
 ">
-    <div>
-        <div >
-            <div >
-              
-                   
+        <div>
             <div>
-               
-                    <div class="col-sm-10">
-                    <div class="pull-left">
-                        <h4><span ng-hide="orderState == 15">Invoice</span><span ng-show="orderState == 15" style="color:red;">Order Cancelled</span></h4>
-                        <h5>Order No: {{ordernr}}</h5>
-                        <div ng-show="comments">
-                        <span style="font-weight: 600;">Comment:</span><br/>
-                       {{comment}}
-                        </div>
-                        </div>
-                         <div class="pull-right">
-                     <p style="padding-right:12px; color:#2F4F4F;"><strong>{{cname}}</strong> <br/> <i class="icon ion-ios-telephone-outline"></i> {{cphone}} <br/>{{clientStreetAddress}}</p>
-                    </div>
-                    </div>
-                  
-                <div class="row">
-                    
-                    <div class="col-sm-12">
-                        <br><br>
-                        <div class="row" style="
-    color: #2F4F4F;
-">
-                            <div class="pull-right"  >
-                              
+                <div>
+
+
+                    <div>
+
+                        <div class="col-sm-10">
+                            <div class="pull-left">
+                                <h4><span ng-hide="orderState == 15">Invoice</span><span ng-show="orderState == 15" style="color:red;">Order Cancelled</span></h4>
+                                <h5>Order No: {{ordernr}}</h5>
+                                <div ng-show="comments">
+                                    <span style="font-weight: 600;">Comment:</span><br/> {{comment}}
+                                </div>
+                            </div>
+                            <div class="pull-right">
+                                <p style="padding-right:12px; color:#2F4F4F;"><strong>{{cname}}</strong> <br/> <i class="icon ion-ios-telephone-outline"></i> {{cphone}} <br/>{{clientStreetAddress}}</p>
                             </div>
                         </div>
+                        <div style="clear:both"></div>
+                        <div class="col-sm-12 pull-right" ng-click="cancelThisOrder()">
+                            <button ng-hide="orderState == 15" class="btn btn-danger "><strong>Cancel Order <!-- <i ng-show="cancelOrderSpinner" class="fa fa-spin fa-spinner"></i> --></strong></button>
+                        </div>
 
-                       
-                    </div>
-                </div><br><br>
-               
-                <br>
-                
-                <div class="row">
-                    <div class="col-sm-12">
-                        <table class="table responsive">
-                            <colgroup>
-                                <col width="10%"></col>
-                                <col width="45%"></col>
-                                <col width="25%"></col>
-                                <col width="25%"></col>
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th style="text-align:left;">Products</th>
-                                    <th>Quantity</th>
-                                    <th style="text-align:right;">Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="order in orderDetails">
-                                    <td>{{$index}}</td>
-                                    <td>{{order.pname}}</td>
-                                    <td>{{order.qty}}</td>
-                                    <td style="text-align:right"><strong>{{currencySymbole}}{{order.price}}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table responsive">
+                                    <colgroup>
+                                        <col width="10%"></col>
+                                        <col width="45%"></col>
+                                        <col width="25%"></col>
+                                        <col width="25%"></col>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th style="text-align:left;">Products</th>
+                                            <th>Quantity</th>
+                                            <th style="text-align:right;">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="order in orderDetails">
+                                            <td>{{$index}}</td>
+                                            <td>{{order.pname}}</td>
+                                            <td>{{order.qty}}</td>
+                                            <td style="text-align:right"><strong>{{currencySymbole}}{{order.price}}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <!-- <td colspan="2">
                                         {{storeAddress}} <br>{{storeCountry}} <br> P: {{storePhone}} <br> {{storeName}} <br>{{storeEmail}}
-                                    </td>
-                                    <td colspan="2" style="text-align:left; padding-left:50px;">
-                                        Delivery time: <strong>{{deliverytime}}</strong><br>
-                                        Sub - Total amount: <strong>{{currencySymbole}}{{totalAmount}}</strong><br>
-                                        VAT: <strong> {{vat}}%</strong><br>
-                                      
-                      
-                                            <span ng-show="mode2"> Delivery price: <strong>{{currencySymbole}}{{deliveryprice}}</strong><br></span>
-                                            <span ng-show="mode2"> Delivery tax: <strong>{{deliverytax}}%</strong><br></span>
-                                           
-                                        
-                                            
-                                        Discount: <strong>......</strong><br>
-                                        Grand Total: <strong>{{currencySymbole}}{{grandTotalAmount}}</strong><br>
-                                      
-                                       
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </td> -->
+                                            <td colspan="4" style="text-align:left;">
+                                                {{deliverymode}} time: <strong>{{deliverytime}}</strong><br> Sub - Total amount: <strong>{{currencySymbole}}{{totalAmount}}</strong><br> VAT: <strong> {{vat}}%</strong><br>
+
+
+                                                <span ng-show="mode2"> Delivery price: <strong>{{currencySymbole}}{{deliveryprice}}</strong><br></span>
+                                                <span ng-show="mode2"> Delivery tax: <strong>{{deliverytax}}%</strong><br></span> Discount: <strong>......</strong><br> Grand Total: <strong>{{currencySymbole}}{{grandTotalAmount}}</strong><br>
+
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
                     </div>
-                  
                 </div>
             </div>
+            <div class="col-sm-2"></div>
         </div>
-    </div>
-    <div class="col-sm-2"></div>
-</div>
- <ion-content>
+    </ion-content>

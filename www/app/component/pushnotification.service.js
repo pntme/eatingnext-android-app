@@ -17,8 +17,12 @@
     // here need to send your registration id on your backend file by that push will be create
     }); 
     //apikey: AIzaSyA5s8xnIje1zYi8aSG1TPANt6eJuIBYMew
-    push.on('notification', function(data) { 
+    push.on('notification', function(data) {
       if (data.additionalData.foreground) { 
+        if (window.device.platform == 'android' || device.platform == 'Android') {
+             var my_media = new Media("/android_asset/www/app/lib/notify.wav");
+             my_media.play();
+        }
         console.log(data); 
       } else { 
             data.message, 
@@ -44,7 +48,7 @@
                          localStorage.setItem('endpoint_arn', resp.data.endpoint_arn);
                     });
         },
-        service.pushAPiFromOrder = function(){
+        service.pushAPiFromRun = function(){
             var deviceToken = localStorage.getItem('deviceToken');
             var endpoint_arn = localStorage.getItem('endpoint_arn');
             var not = notification.editdevice({

@@ -3,7 +3,7 @@
 
     angular.module('xenapp')
             .controller('productOrdersController', productOrdersController);
-    function productOrdersController($scope, userValidate, addOrderFactory, $localStorage, orders, $interval, fetchOrdersService, localStorageService, orderListFactory, $rootScope, $state, orderDetailsFactory, arrayService, pushNotificationService) {
+    function productOrdersController($scope, userValidate, addOrderFactory, $localStorage, orders, $interval, fetchOrdersService, localStorageService, orderListFactory, $rootScope, $state, orderDetailsFactory, arrayService, pushNotificationService, $ionicHistory) {
  
         userValidate.validUser();
         var userData = localStorageService.get('userData');
@@ -19,26 +19,19 @@
         $scope.doRefresh = function () {
              $scope.spinner = true;
              orders1();
-             fetchOrdersService.newOrders(true);
         }
         orders1();
+        fetchOrdersService.newOrders();
         function onpageLoadApi() {
             var query = orderListFactory.query({"storeId": lid});
             query.$promise.then(function (data) {
-
                 $scope.currencySymbole = arrayService.CurrencySymbol($localStorage.storeInfo.lcurrency);
-
-
             });
         }
-
-
         $scope.logout = function () {
             localStorageService.removeAll();
-
             $state.go('login');
         };
-        pushNotificationService.pushAPiFromOrder();
         $scope.orderId = function (orderId, order_state) {
             if (order_state == 15 || order_state == 3) {
                 localStorageService.set('singleOrderId', orderId);
@@ -46,39 +39,33 @@
             } else {
                 var query = orderDetailsFactory.editOrder({"orderId": orderId, "order_state": 3});
                 query.$promise.then(function (data) {
-                    fetchOrdersService.newOrders(true);
-
-
                 });
                 localStorageService.set('singleOrderId', orderId);
                  $state.go('details');
-                  
             }
         };
 
-        var interval = $interval(function () {
-            if (!$localStorage.userData)
-                $interval.cancel(interval);
-            else
-                orders1();
-            // }, 60000);
-        }, 6000);
+        $scope.$on('fireOrder1Api', function () {
+            orders1();
+        });
         function orders1() {
-            var query4 = orders.save({
-//                "to":new Date().getTime(),
-//                 "from":1456165800000       
+            var query4 = orderListFactory.query({
+                "storeId": lid,
                 "to": new Date().getTime(),
                 "from": new Date(moment().startOf('day')).getTime()
             });
             query4.$promise.then(function (data) {
+                var newData = [];
+                for(var i = 0; i < data.length; i++){
+                    data[i].time = data[i].time.substring(11, 16);
+                    newData.push(data[i]);
+                }
                 $scope.loadingSpinner = false;
                 $scope.hideMainContent = true;
-                //console.log(data);
-                $scope.orderList = data.data;
+                $scope.orderList = newData;
                 $scope.spinner = false;
-                $rootScope.customerdata = data.data;
+                $rootScope.customerdata = newData;
             })  .finally(function() {
-       // Stop the ion-refresher from spinning
        $scope.$broadcast('scroll.refreshComplete');
      });
   

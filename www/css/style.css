@@ -1,1 +1,13 @@
 /* Empty. Add your own CSS if you like */
+.red{
+	background-color: red;
+	color: #fff;
+}
+.green{
+	background-color: green;
+	color: #fff;
+}
+.grey{
+	background-color: #ddd;
+	color: #fff;
+}
